@@ -57,6 +57,10 @@ flowchart LR
 * `infrastructure/`: Terraform configuration files.
 * `.github/`: GitHub Actions workflow for automated deployment.
 
+## 🛠️ License
+* This repository contains original work, written independently.
+* You may modify and extend freely.
 ---
 *Created by Muhammad Zafar Saffee - Cloud Security & DevOps Engineer*
+
 
