@@ -8,6 +8,31 @@ This repository demonstrates a fully **Serverless, Event-Driven Architecture** o
 The application is an **Order Processing System** that decouples the user-facing API from heavy backend processing using **DynamoDB Streams**. This ensures the API remains fast and responsive even during peak load.
 
 ## 🏗 Architecture & Tech Stack
+
+```mermaid
+flowchart LR
+    %% Nodes
+    User([👤 User/Client])
+    APIGW(AWS API Gateway\nHTTP API)
+    L1[λ create_order\n(Python)]
+    DDB[(Amazon DynamoDB\nOrders Table)]
+    L2[λ process_order\n(Python)]
+    CW(CloudWatch Logs)
+
+    %% Flow Connections
+    User -->|1. POST /orders (JSON)| APIGW
+    APIGW -->|2. Invoke| L1
+    L1 -->|3. PutItem (Status: PENDING)| DDB
+    DDB -.->|4. Stream INSERT Event (Async)| L2
+    L2 -->|5. Process & Log| CW
+
+    %% Styling
+    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:1px,color:white;
+    classDef db fill:#3B48CC,stroke:#232F3E,stroke-width:1px,color:white;
+    class L1,L2,APIGW aws;
+    class DDB db;
+```
+
 * **Infrastructure as Code:** Terraform
 * **API Layer:** AWS API Gateway (HTTP API)
 * **Compute:** AWS Lambda (Python 3.9)
