@@ -13,17 +13,17 @@ The application is an **Order Processing System** that decouples the user-facing
 flowchart LR
     %% Nodes
     User([👤 User/Client])
-    APIGW(AWS API Gateway\nHTTP API)
-    L1[λ create_order\n(Python)]
-    DDB[(Amazon DynamoDB\nOrders Table)]
-    L2[λ process_order\n(Python)]
+    APIGW("AWS API Gateway\nHTTP API")
+    L1["λ create_order\n(Python)"]
+    DDB[("Amazon DynamoDB\nOrders Table")]
+    L2["λ process_order\n(Python)"]
     CW(CloudWatch Logs)
 
     %% Flow Connections
-    User -->|1. POST /orders (JSON)| APIGW
+    User -->|1. POST /orders JSON| APIGW
     APIGW -->|2. Invoke| L1
-    L1 -->|3. PutItem (Status: PENDING)| DDB
-    DDB -.->|4. Stream INSERT Event (Async)| L2
+    L1 -->|3. PutItem Status: PENDING| DDB
+    DDB -.->|4. Stream INSERT Event Async| L2
     L2 -->|5. Process & Log| CW
 
     %% Styling
